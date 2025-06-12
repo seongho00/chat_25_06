@@ -21,7 +21,23 @@ public class ChatController {
     public RsData writerMessage() {
         ChatMessage message = new ChatMessage("홍길동", "메세지");
         chatMessages.add(message);
-        return new RsData("S-1", "메세지 작성됨", new writeChatMessageResponse(message.getId()));
+        return new RsData(
+                "S-1",
+                "메세지 작성됨",
+                new writeChatMessageResponse(message.getId())
+        );
+    }
+
+    @GetMapping("/messages")
+    @ResponseBody
+    public RsData messages() {
+        ChatMessage message = new ChatMessage("홍길동", "메세지");
+        chatMessages.add(message);
+        return new RsData(
+                "S-1",
+                "메세지 작성됨",
+                chatMessages
+        );
     }
 
 }
