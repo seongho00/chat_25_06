@@ -12,19 +12,23 @@ public class ChatController {
 
     private List<ChatMessage> chatMessages = new ArrayList<>();
 
-    public static record writeChatMessageResponse(long id) {
+    public record writeChatMessageResponse(long id, String authorName, String content) {
 
     }
 
-    @GetMapping("/writeMessage")
+    public record writeChatMessageRequest(String authorName, String content) {
+
+    }
+
+    @PostMapping("/writeMessage")
     @ResponseBody
-    public RsData writerMessage() {
-        ChatMessage message = new ChatMessage("홍길동", "메세지");
+    public RsData writerMessage(writeChatMessageRequest req) {
+        ChatMessage message = new ChatMessage(req.authorName, req.content);
         chatMessages.add(message);
         return new RsData(
                 "S-1",
                 "메세지 작성됨",
-                new writeChatMessageResponse(message.getId())
+                new writeChatMessageResponse(message.getId(), message.getAuthorName(), message.getContent())
         );
     }
 
