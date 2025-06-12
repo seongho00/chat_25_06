@@ -22,7 +22,7 @@ public class ChatController {
 
     @PostMapping("/writeMessage")
     @ResponseBody
-    public RsData writerMessage(writeChatMessageRequest req) {
+    public RsData<writeChatMessageResponse> writerMessage(@RequestBody writeChatMessageRequest req) {
         ChatMessage message = new ChatMessage(req.authorName, req.content);
         chatMessages.add(message);
         return new RsData(
@@ -32,15 +32,18 @@ public class ChatController {
         );
     }
 
+    public record messagesResponse(List<ChatMessage> chatMessages, long count) {
+
+    }
+
     @GetMapping("/messages")
     @ResponseBody
-    public RsData messages() {
-        ChatMessage message = new ChatMessage("홍길동", "메세지");
-        chatMessages.add(message);
+    public RsData<messagesResponse> messages() {
+
         return new RsData(
                 "S-1",
                 "메세지 작성됨",
-                chatMessages
+                new messagesResponse(chatMessages, chatMessages.size())
         );
     }
 
