@@ -23,6 +23,11 @@ public class ChatController {
 
     }
 
+    @GetMapping("/room")
+    public String showRoom() {
+        return "chat/room";
+    }
+
     @PostMapping("/writeMessage")
     @ResponseBody
     public RsData<writeChatMessageResponse> writerMessage(@RequestBody writeChatMessageRequest req) {
@@ -49,7 +54,7 @@ public class ChatController {
 
         List<ChatMessage> messages = chatMessages;
 
-        log.debug("req : {}", req); // 출력해주지만
+        log.debug("req : {}", req);
         // fromId : 몇 번 채팅로그부터 불러올 것인지 (다 불러올 수는 없기 떄문에)
 
         // fromId가 입력된 경우
