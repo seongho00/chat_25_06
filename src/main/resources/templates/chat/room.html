@@ -17,30 +17,30 @@
 
 <script>
     // ajax 유틸
-function fetchPost(url, data) {
-    return fetch(url, {
-        method: "POST",
-        headers: {
-            "Content-Type": "application/json",
-            Accept: "application/json"
-        },
-        body: JSON.stringify(data)
-    }).then((response) => response.json());
-}
+    function fetchPost(url, data) {
+        return fetch(url, {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+                Accept: "application/json"
+            },
+            body: JSON.stringify(data)
+        }).then((response) => response.json());
+    }
 
-function fetchGet(url, data) {
-    let query = Object.keys(data)
-        .map((k) => encodeURIComponent(k) + "=" + encodeURIComponent(data[k]))
-        .join("&");
+    function fetchGet(url, data) {
+        let query = Object.keys(data)
+            .map((k) => encodeURIComponent(k) + "=" + encodeURIComponent(data[k]))
+            .join("&");
 
-    return fetch(url + "?" + query, {
-        method: "GET",
-        headers: {
-            "Content-Type": "application/json",
-            Accept: "application/json"
-        }
-    }).then((response) => response.json());
-}
+        return fetch(url + "?" + query, {
+            method: "GET",
+            headers: {
+                "Content-Type": "application/json",
+                Accept: "application/json"
+            }
+        }).then((response) => response.json());
+    }
 </script>
 <script>
     // 채팅 작성 폼
@@ -71,5 +71,33 @@ function fetchGet(url, data) {
         form.content.focus();
     }
 
+    let Chat__lastLoadedId = 0;
 
+    function Chat__loadMore() {
+        fetchGet("/chat/messages", {
+            fromId: Chat__lastLoadedId
+        }).then(body => {
+            Chat__drawMessages(body.data.chatMessages)
+        });
+    }
+
+    const Chat_elMessageUl = document.querySelector('.chat__message-ul');
+
+    function Chat__drawMessages(messages) {
+        console.log(messages);
+        if (messages.length == 0) {
+            return;
+        }
+        // Chat__lastLoadedId 변수 값 갱신
+        Chat__lastLoadedId = messages[messages.length - 1].id;
+
+        messages.forEach((message) => {
+            Chat_elMessageUl.insertAdjacentHTML(
+                "afterbegin",
+                `<li>${message.authorName} : ${message.content}`
+            )
+        })
+
+
+    }
 </script>
