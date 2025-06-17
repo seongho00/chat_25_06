@@ -12,7 +12,8 @@
 
     </div>
 
-    <button onClick="Chat__loadMore();">로드</button>
+    <!--    <button onClick="Chat__loadMore();">로드</button>-->
+
 </div>
 
 <script>
@@ -69,6 +70,7 @@
 
         form.content.value = "";
         form.content.focus();
+
     }
 
     let Chat__lastLoadedId = 0;
@@ -98,6 +100,18 @@
             )
         })
 
-
+        // 0.5초마다 계속 갱신
+        // setTimeout(Chat__loadMore, 500);
     }
+
+    // sse 활용
+    const sse = new EventSource("/sse/connect");
+
+    sse.addEventListener('chat__messageAdded', e =>{
+        Chat__loadMore();
+    });
+
+    // 기존에 써 놓은 댓글 보여주기
+    Chat__loadMore();
+
 </script>
